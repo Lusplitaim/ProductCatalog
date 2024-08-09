@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductCatalog.Core.DTOs.User;
+using ProductCatalog.Core.Extensions;
 using ProductCatalog.Core.Services;
 
 namespace ProductCatalog.API.Controllers
@@ -18,14 +19,14 @@ namespace ProductCatalog.API.Controllers
         public async Task<IActionResult> Register(CreateUserDto model)
         {
             var result = await m_AuthService.RegisterAsync(model);
-            return Created(nameof(Register), result);
+            return this.ResolveResult(result, () => Created(nameof(Register), result));
         }
 
         [HttpPost("sign-in")]
         public async Task<IActionResult> SignIn(SignInUserDto model)
         {
             var result = await m_AuthService.AuthenticateAsync(model);
-            return Ok(result);
+            return this.ResolveResult(result, () => Ok(result));
         }
     }
 }

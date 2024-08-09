@@ -5,7 +5,7 @@ namespace ProductCatalog.Core.Services
 {
     public interface IAuthService
     {
-        Task<AuthResult> RegisterAsync(CreateUserDto model);
-        Task<AuthResult> AuthenticateAsync(SignInUserDto model);
+        Task<ExecResult<AuthResult>> RegisterAsync(CreateUserDto model);
+        Task<ExecResult<AuthResult>> AuthenticateAsync(SignInUserDto model);
     }
 }

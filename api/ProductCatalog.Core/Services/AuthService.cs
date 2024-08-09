@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ProductCatalog.Core.Data.Entities;
 using ProductCatalog.Core.DTOs.User;
+using ProductCatalog.Core.Exceptions;
 using ProductCatalog.Core.Models;
 using ProductCatalog.Core.Models.Options;
 using ProductCatalog.Core.Storages;
@@ -30,96 +31,96 @@ namespace ProductCatalog.Core.Services
             m_JwtOptions = opts.Value;
         }
 
-        public async Task<AuthResult> AuthenticateAsync(SignInUserDto model)
+        public async Task<ExecResult<AuthResult>> AuthenticateAsync(SignInUserDto model)
         {
             try
             {
+                var result = new ExecResult<AuthResult>();
+
                 var existingUser = await m_UserManager.FindByEmailAsync(model.Email);
                 if (existingUser is null)
                 {
-                    throw new Exception("User not found");
+                    result.AddError("Wrong email or password");
+                    return result;
                 }
 
                 var signInResult = await m_SignInManager.CheckPasswordSignInAsync(existingUser, model.Password, false);
                 if (!signInResult.Succeeded)
                 {
-                    throw new Exception("Wrong email or password");
+                    result.AddError("Wrong email or password");
+                    return result;
                 }
 
                 var token = await CreateTokenAsync(model.Email);
                 var user = await m_UserStorage.GetAsync(model.Email);
 
-                AuthResult result = new() { User = user, Token = token };
+                result.Result = new() { User = user, Token = token };
 
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not RestCoreException)
             {
-                throw;
+                throw new Exception("Failed to login user", ex);
             }
         }
 
-        public async Task<AuthResult> RegisterAsync(CreateUserDto model)
+        public async Task<ExecResult<AuthResult>> RegisterAsync(CreateUserDto model)
         {
             try
             {
+                var result = new ExecResult<AuthResult>();
+
                 var registerResult = await m_UserStorage.CreateAsync(model);
                 if (!registerResult)
                 {
-                    throw new Exception("Failed to create user");
+                    result.AddError("Failed to create user");
+                    return result;
                 }
 
                 var token = await CreateTokenAsync(model.Email);
                 var user = await m_UserStorage.GetAsync(model.Email);
 
-                AuthResult result = new() { User = user, Token = token };
+                result.Result = new() { User = user, Token = token };
 
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex) when (ex is not RestCoreException)
             {
-                throw;
+                throw new Exception("Failed to register user", ex);
             }
         }
 
         private async Task<string> CreateTokenAsync(string userEmail)
         {
-            try
-            {
-                var user = await m_UserManager.FindByEmailAsync(userEmail);
+            var user = await m_UserManager.FindByEmailAsync(userEmail);
 
-                if (user is not null)
-                {
-                    var claims = new List<Claim>
+            if (user is not null)
+            {
+                var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     };
 
-                    var userRoles = await m_UserManager.GetRolesAsync(user);
-                    foreach (var role in userRoles)
-                    {
-                        claims.Add(new Claim(ClaimTypes.Role, role));
-                    }
-
-                    var jwt = new JwtSecurityToken(
-                        issuer: m_JwtOptions.ValidIssuer,
-                        audience: m_JwtOptions.ValidAudience,
-                        claims: claims,
-                        expires: DateTime.UtcNow.Add(TimeSpan.FromDays(5)),
-                        signingCredentials: new SigningCredentials(new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(m_JwtOptions.SecretKey)),
-                            SecurityAlgorithms.HmacSha256));
-
-                    return new JwtSecurityTokenHandler().WriteToken(jwt);
+                var userRoles = await m_UserManager.GetRolesAsync(user);
+                foreach (var role in userRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
                 }
-            }
-            catch (Exception ex)
-            {
-                throw;
+
+                var jwt = new JwtSecurityToken(
+                    issuer: m_JwtOptions.ValidIssuer,
+                    audience: m_JwtOptions.ValidAudience,
+                    claims: claims,
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromDays(5)),
+                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(m_JwtOptions.SecretKey)),
+                        SecurityAlgorithms.HmacSha256));
+
+                return new JwtSecurityTokenHandler().WriteToken(jwt);
             }
 
-            throw new Exception("No user found");
+            throw new NotFoundCoreException();
         }
     }
 }
