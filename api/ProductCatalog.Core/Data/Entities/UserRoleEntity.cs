@@ -2,7 +2,7 @@
 
 namespace ProductCatalog.Core.Data.Entities
 {
-    public class UserRole : IdentityRole<int>
+    public class UserRoleEntity : IdentityRole<int>
     {
         public override string Name { get; set; }
     }

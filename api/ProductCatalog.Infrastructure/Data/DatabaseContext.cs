@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProductCatalog.Infrastructure.Data
 {
-    internal class DatabaseContext : IdentityDbContext<UserEntity, UserRole, int>
+    internal class DatabaseContext : IdentityDbContext<UserEntity, UserRoleEntity, int>
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {

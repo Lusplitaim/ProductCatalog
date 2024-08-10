@@ -71,9 +71,9 @@ namespace ProductCatalog.Core.Services
                 var result = new ExecResult<AuthResult>();
 
                 var registerResult = await m_UserStorage.CreateAsync(model);
-                if (!registerResult)
+                if (!registerResult.Succeeded)
                 {
-                    result.AddError("Failed to create user");
+                    result.AddErrors(registerResult);
                     return result;
                 }
 

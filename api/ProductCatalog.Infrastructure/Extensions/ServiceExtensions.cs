@@ -32,8 +32,8 @@ namespace ProductCatalog.Infrastructure.Extensions
                 o.User.RequireUniqueEmail = true;
             })
             .AddSignInManager()
-            .AddRoles<UserRole>()
-            .AddRoleManager<RoleManager<UserRole>>()
+            .AddRoles<UserRoleEntity>()
+            .AddRoleManager<RoleManager<UserRoleEntity>>()
             .AddEntityFrameworkStores<DatabaseContext>();
         }
 

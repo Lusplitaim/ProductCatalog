@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using ProductCatalog.Core.Data;
+using ProductCatalog.Core.Data.Repositories;
+using ProductCatalog.Infrastructure.Data.Repositories;
 
 namespace ProductCatalog.Infrastructure.Data
 {
@@ -10,6 +12,9 @@ namespace ProductCatalog.Infrastructure.Data
         {
             m_DbContext = dbContext;
         }
+
+        public IUserRepository UserRepository => new UserRepository(m_DbContext);
+        public IUserRoleRepository UserRoleRepository => new UserRoleRepository(m_DbContext);
 
         public async Task SaveAsync()
         {

@@ -17,6 +17,7 @@ namespace ProductCatalog.Core.Extensions
             ConfigureJWT(services, config);
 
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IUserStorage, UserStorage>();
 
