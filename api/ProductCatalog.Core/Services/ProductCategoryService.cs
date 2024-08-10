@@ -20,7 +20,12 @@ namespace ProductCatalog.Core.Services
         {
             try
             {
+                using var transaction = m_UnitOfWork.BeginTransaction();
+
                 var result = await m_ProductCategoryStorage.CreateAsync(model);
+                
+                transaction.Commit();
+
                 return result;
             }
             catch (Exception ex) when (ex is not RestCoreException)
@@ -33,7 +38,12 @@ namespace ProductCatalog.Core.Services
         {
             try
             {
+                using var transaction = m_UnitOfWork.BeginTransaction();
+
                 var result = await m_ProductCategoryStorage.UpdateAsync(categoryId, model);
+                
+                transaction.Commit();
+                
                 return result;
             }
             catch (Exception ex) when (ex is not RestCoreException)
@@ -46,7 +56,12 @@ namespace ProductCatalog.Core.Services
         {
             try
             {
+                using var transaction = m_UnitOfWork.BeginTransaction();
+
                 var result = await m_ProductCategoryStorage.DeleteAsync(categoryId);
+                
+                transaction.Commit();
+                
                 return result;
             }
             catch (Exception ex) when (ex is not RestCoreException)
