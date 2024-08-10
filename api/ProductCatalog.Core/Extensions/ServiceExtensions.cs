@@ -18,8 +18,10 @@ namespace ProductCatalog.Core.Extensions
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
             services.AddScoped<IUserStorage, UserStorage>();
+            services.AddScoped<IProductCategoryStorage, ProductCategoryStorage>();
 
             services.AddScoped<IAuthUtils, AuthUtils>();
 

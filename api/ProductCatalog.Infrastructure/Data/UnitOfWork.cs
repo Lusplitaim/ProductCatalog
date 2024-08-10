@@ -15,6 +15,7 @@ namespace ProductCatalog.Infrastructure.Data
 
         public IUserRepository UserRepository => new UserRepository(m_DbContext);
         public IUserRoleRepository UserRoleRepository => new UserRoleRepository(m_DbContext);
+        public IProductCategoryRepository ProductCategoryRepository => new ProductCategoryRepository(m_DbContext);
 
         public async Task SaveAsync()
         {

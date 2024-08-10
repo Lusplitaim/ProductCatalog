@@ -7,6 +7,7 @@ namespace ProductCatalog.Core.Data
     {
         IUserRepository UserRepository { get; }
         IUserRoleRepository UserRoleRepository { get; }
+        IProductCategoryRepository ProductCategoryRepository { get; }
         Task SaveAsync();
         IDbContextTransaction BeginTransaction();
     }
