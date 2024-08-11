@@ -19,14 +19,14 @@ namespace ProductCatalog.API.Controllers
         public async Task<IActionResult> Register(CreateUserDto model)
         {
             var result = await m_AuthService.RegisterAsync(model);
-            return this.ResolveResult(result, () => Created(nameof(Register), result));
+            return this.ResolveResult(result, () => Created(nameof(Register), result.Result));
         }
 
         [HttpPost("sign-in")]
         public async Task<IActionResult> SignIn(SignInUserDto model)
         {
             var result = await m_AuthService.AuthenticateAsync(model);
-            return this.ResolveResult(result, () => Ok(result));
+            return this.ResolveResult(result, () => Ok(result.Result));
         }
     }
 }

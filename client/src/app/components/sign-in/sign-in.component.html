@@ -1,0 +1,23 @@
+<p-card header="Вход">
+    <form class="space-y-7" [formGroup]="loginForm" (ngSubmit)="login()">
+        <!-- <div>
+            <p-floatLabel>
+                <input pInputText type="text" class="form-control" formControlName="userName" />
+                <label for="userName" class="form-label">Ник пользователя</label>
+            </p-floatLabel>
+        </div> -->
+        <div>
+            <p-floatLabel>
+                <input pInputText type="email" class="form-control" aria-describedby="emailHelp" formControlName="email" />
+                <label for="email" class="form-label">Электронный ящик</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <input pInputText type="password" class="form-control" formControlName="password" />
+                <label for="password" class="form-label">Пароль</label>
+            </p-floatLabel>
+        </div>
+        <button pButton type="submit" class="p-button" [disabled]="!loginForm.valid">Войти</button>
+    </form>
+</p-card>
