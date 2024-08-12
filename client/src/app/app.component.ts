@@ -20,6 +20,10 @@ export class AppComponent {
       routerLink: this.getRouterLink(GlobalRoutePath.products),
     },
     {
+      label: "Категории",
+      routerLink: this.getRouterLink(GlobalRoutePath.productCategories),
+    },
+    {
       label: "Вход",
       routerLink: this.getRouterLink(GlobalRoutePath.signIn),
     },

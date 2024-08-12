@@ -1,0 +1,28 @@
+<p-table
+    [value]="categories"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    selectionMode="single"
+    dataKey="id"
+    [(selection)]="selectedCategory"
+    (onRowSelect)="onRowSelect()">
+    <ng-template pTemplate="caption">
+        <div class="flex flex-row items-center justify-between">
+            <div>
+                Категории продуктов
+            </div>
+            <button pButton (click)="openEditModal()"><i class="pi pi-plus"></i></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Код</th>
+            <th>Имя</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-category>
+        <tr [pSelectableRow]="category">
+            <td>{{ category.id }}</td>
+            <td>{{ category.name }}</td>
+        </tr>
+    </ng-template>
+</p-table>

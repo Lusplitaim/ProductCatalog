@@ -21,9 +21,8 @@ import { DialogEditResult } from '../../models/dialogEditResult';
 export class ProductsComponent implements OnInit {
   private productsService = inject(ProductsService);
   private categoriesService = inject(ProductCategoriesService);
-  
-  dialogRef: DynamicDialogRef | undefined;
-  dialogService = inject(DialogService);
+  private dialogRef: DynamicDialogRef | undefined;
+  private dialogService = inject(DialogService);
   
   categories: ProductCategory[] = [];
   products: Product[] = [];

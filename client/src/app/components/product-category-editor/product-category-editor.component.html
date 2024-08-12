@@ -1,0 +1,14 @@
+<form class="flex flex-col items-center space-y-7" [formGroup]="editForm" (ngSubmit)="save()">
+    <div class="self-center space-y-7">
+        <div>
+            <p-floatLabel>
+                <input pInputText type="text" class="form-control" formControlName="name" />
+                <label for="name" class="form-label">Наименование</label>
+            </p-floatLabel>
+        </div>
+    </div>
+    <button pButton type="submit" class="p-button" [disabled]="editMode ? !editForm.dirty : !editForm.valid">{{editMode ? 'Сохранить' : 'Создать'}}</button>
+    @if (editMode) {
+        <button pButton severity="danger" class="p-button" (click)="delete()">Удалить</button>
+    }
+</form>
