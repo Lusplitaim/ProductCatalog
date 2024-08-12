@@ -1,0 +1,49 @@
+<form class="flex flex-col items-center space-y-7" [formGroup]="editForm" (ngSubmit)="save()">
+    <div class="self-center space-y-7">
+        <div>
+            <p-floatLabel>
+                <input pInputText type="text" class="form-control" formControlName="name" />
+                <label for="name" class="form-label">Наименование</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <textarea pInputTextarea rows="5" cols="23" class="form-control" formControlName="description"></textarea>
+                <label for="description" class="form-label">Описание</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <input pInputText type="number" class="form-control" formControlName="price" />
+                <label for="price" class="form-label">Стоимость</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <input pInputText type="text" class="form-control" formControlName="note" />
+                <label for="note" class="form-label">Примечание общее</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <input pInputText type="text" class="form-control" formControlName="specialNote" />
+                <label for="specialNote" class="form-label">Примечание специальное</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <p-dropdown 
+                    formControlName="category" 
+                    [options]="categories"
+                    optionLabel="name"
+                    dataKey="id"
+                    inputId="category" />
+                <label for="category" class="form-label">Категория</label>
+            </p-floatLabel>
+        </div>
+    </div>
+    <button pButton type="submit" class="p-button" [disabled]="editMode ? !editForm.dirty : !editForm.valid">{{editMode ? 'Сохранить' : 'Создать'}}</button>
+    @if (editMode) {
+        <button pButton severity="danger" class="p-button" (click)="delete()">Удалить</button>
+    }
+</form>

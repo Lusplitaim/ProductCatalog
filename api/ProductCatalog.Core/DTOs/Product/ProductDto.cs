@@ -1,5 +1,4 @@
 ﻿using ProductCatalog.Core.Data.Entities;
-using ProductCatalog.Core.DTOs.ProductCategory;
 
 namespace ProductCatalog.Core.DTOs.Product
 {

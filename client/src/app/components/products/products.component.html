@@ -1,0 +1,32 @@
+<p-table
+    [value]="products"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    selectionMode="single"
+    dataKey="id"
+    [(selection)]="selectedProduct"
+    (onRowSelect)="onRowSelect($event)">
+    <ng-template pTemplate="caption">
+        <div class="flex flex-row items-center justify-between">
+            <div>
+                Products
+            </div>
+            <button pButton (click)="openCreationModal()"><i class="pi pi-plus"></i></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Код</th>
+            <th>Наименование</th>
+            <th>Категория</th>
+            <th>Стоимость</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+        <tr [pSelectableRow]="product">
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ getCategoryName(product.categoryId) }}</td>
+            <td>{{ product.price }}</td>
+        </tr>
+    </ng-template>
+</p-table>

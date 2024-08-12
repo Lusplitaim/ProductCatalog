@@ -19,7 +19,7 @@ import { GlobalRoutePath } from '../../app.routes';
 export class SignInComponent {
   private accountService = inject(AccountService);
   private router = inject(Router);
-  formBuilder = inject(FormBuilder);
+  private formBuilder = inject(FormBuilder);
   
   loginForm = this.formBuilder.group({
     email: new FormControl<string>('', [Validators.required]),
