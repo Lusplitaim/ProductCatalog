@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using ProductCatalog.Core.Data.Entities;
 using ProductCatalog.Core.DTOs.User;
 using ProductCatalog.Core.Exceptions;
+using ProductCatalog.Core.Managers;
 using ProductCatalog.Core.Models;
 using ProductCatalog.Core.Models.Options;
 using ProductCatalog.Core.Storages;
@@ -19,16 +20,19 @@ namespace ProductCatalog.Core.Services
         private readonly UserManager<UserEntity> m_UserManager;
         private readonly SignInManager<UserEntity> m_SignInManager;
         private readonly JwtOptions m_JwtOptions;
+        private readonly ILoggerManager m_Logger;
         public AuthService(
             IUserStorage userStorage,
             UserManager<UserEntity> userManager,
             SignInManager<UserEntity> signInManager,
-            IOptions<JwtOptions> opts)
+            IOptions<JwtOptions> opts,
+            ILoggerManager logger)
         {
             m_UserStorage = userStorage;
             m_UserManager = userManager;
             m_SignInManager = signInManager;
             m_JwtOptions = opts.Value;
+            m_Logger = logger;
         }
 
         public async Task<ExecResult<AuthResult>> AuthenticateAsync(SignInUserDto model)
@@ -60,6 +64,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to login user", ex);
             }
         }
@@ -86,6 +91,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to register user", ex);
             }
         }

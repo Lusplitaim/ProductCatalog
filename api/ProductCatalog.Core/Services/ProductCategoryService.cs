@@ -1,6 +1,7 @@
 ﻿using ProductCatalog.Core.Data;
 using ProductCatalog.Core.DTOs.ProductCategory;
 using ProductCatalog.Core.Exceptions;
+using ProductCatalog.Core.Managers;
 using ProductCatalog.Core.Models;
 using ProductCatalog.Core.Storages;
 
@@ -10,10 +11,12 @@ namespace ProductCatalog.Core.Services
     {
         private readonly IProductCategoryStorage m_ProductCategoryStorage;
         private readonly IUnitOfWork m_UnitOfWork;
-        public ProductCategoryService(IProductCategoryStorage pcs, IUnitOfWork uow)
+        private readonly ILoggerManager m_Logger;
+        public ProductCategoryService(IProductCategoryStorage pcs, IUnitOfWork uow, ILoggerManager logger)
         {
             m_ProductCategoryStorage = pcs;
             m_UnitOfWork = uow;
+            m_Logger = logger;
         }
 
         public async Task<ExecResult<ProductCategoryDto>> CreateAsync(CreateProductCategoryDto model)
@@ -30,6 +33,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to create category", ex);
             }
         }
@@ -48,6 +52,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to update category", ex);
             }
         }
@@ -66,6 +71,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to delete category", ex);
             }
         }
@@ -79,6 +85,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to get categories", ex);
             }
         }

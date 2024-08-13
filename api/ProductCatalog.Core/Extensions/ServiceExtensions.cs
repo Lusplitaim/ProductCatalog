@@ -2,6 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using NLog;
+using NLog.Extensions.Logging;
+using ProductCatalog.Core.Managers;
 using ProductCatalog.Core.Models.Options;
 using ProductCatalog.Core.Services;
 using ProductCatalog.Core.Storages;
@@ -15,6 +18,7 @@ namespace ProductCatalog.Core.Extensions
         public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration config)
         {
             ConfigureJWT(services, config);
+            ConfigureLogging(config);
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
@@ -26,10 +30,16 @@ namespace ProductCatalog.Core.Extensions
             services.AddScoped<IProductStorage, ProductStorage>();
 
             services.AddScoped<IAuthUtils, AuthUtils>();
+            services.AddSingleton<ILoggerManager, LoggerManager>();
 
             services.Configure<JwtOptions>(config.GetSection(JwtOptions.JwtSettings));
 
             return services;
+        }
+
+        private static void ConfigureLogging(IConfiguration config)
+        {
+            LogManager.Configuration = new NLogLoggingConfiguration(config.GetSection("NLog"));
         }
 
         private static void ConfigureJWT(IServiceCollection services, IConfiguration configuration)

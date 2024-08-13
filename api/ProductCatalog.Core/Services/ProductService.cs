@@ -1,6 +1,7 @@
 ﻿using ProductCatalog.Core.Data;
 using ProductCatalog.Core.DTOs.Product;
 using ProductCatalog.Core.Exceptions;
+using ProductCatalog.Core.Managers;
 using ProductCatalog.Core.Models;
 using ProductCatalog.Core.Storages;
 
@@ -10,10 +11,12 @@ namespace ProductCatalog.Core.Services
     {
         private readonly IProductStorage m_ProductStorage;
         private readonly IUnitOfWork m_UnitOfWork;
-        public ProductService(IProductStorage productStorage, IUnitOfWork uow)
+        private readonly ILoggerManager m_Logger;
+        public ProductService(IProductStorage productStorage, IUnitOfWork uow, ILoggerManager logger)
         {
             m_ProductStorage = productStorage;
             m_UnitOfWork = uow;
+            m_Logger = logger;
         }
 
         public async Task<ICollection<ProductDto>> GetAsync()
@@ -25,6 +28,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to get products", ex);
             }
         }
@@ -38,6 +42,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to get product", ex);
             }
         }
@@ -56,6 +61,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to create product", ex);
             }
         }
@@ -74,6 +80,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to update product", ex);
             }
         }
@@ -92,6 +99,7 @@ namespace ProductCatalog.Core.Services
             }
             catch (Exception ex) when (ex is not RestCoreException)
             {
+                m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to delete product", ex);
             }
         }
