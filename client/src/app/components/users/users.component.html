@@ -1,0 +1,30 @@
+<p-table
+    [value]="users"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    selectionMode="single"
+    dataKey="id"
+    [(selection)]="selectedUser"
+    (onRowSelect)="onRowSelect($event)">
+    <ng-template pTemplate="caption">
+        <div class="flex flex-row items-center justify-between">
+            <div>
+                Пользователи
+            </div>
+            <button pButton (click)="openCreationModal()"><i class="pi pi-user-plus"></i></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Код</th>
+            <th>Никнейм</th>
+            <th>Электронный ящик</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+        <tr [pSelectableRow]="user">
+            <td>{{ user.id }}</td>
+            <td>{{ user.userName }}</td>
+            <td>{{ user.email }}</td>
+        </tr>
+    </ng-template>
+</p-table>

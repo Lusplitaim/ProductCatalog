@@ -4,6 +4,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { authGuard } from './guards/auth.guard';
 import { ProductCategoriesComponent } from './components/product-categories/product-categories.component';
+import { UsersComponent } from './components/users/users.component';
 
 export const routes: Routes = [
     {
@@ -23,6 +24,10 @@ export const routes: Routes = [
                 path: GlobalRoutePath.productCategories,
                 component: ProductCategoriesComponent,
             },
+            {
+                path: GlobalRoutePath.users,
+                component: UsersComponent,
+            },
         ],
     },
     {
@@ -38,6 +43,7 @@ export const routes: Routes = [
 export const enum GlobalRoutePath {
     products = 'products',
     productCategories = 'product-categories',
+    users = 'users',
     signIn = 'sign-in',
     signUp = 'sign-up',
 };

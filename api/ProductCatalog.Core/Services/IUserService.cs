@@ -6,6 +6,7 @@ namespace ProductCatalog.Core.Services
     public interface IUserService
     {
         Task<IEnumerable<UserDto>> GetAsync();
+        Task<UserDto> GetAsync(int id);
         Task<ExecResult<UserDto>> CreateAsync(CreateUserDto model);
         Task<ExecResult<UserDto>> UpdateAsync(int userId, UpdateUserDto model);
         Task<ExecResult> DeleteAsync(int userId);

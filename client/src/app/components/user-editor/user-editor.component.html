@@ -1,0 +1,35 @@
+<form class="flex flex-col items-center space-y-7" [formGroup]="editForm" (ngSubmit)="save()">
+    <div class="self-center space-y-7">
+        <div>
+            <p-floatLabel>
+                <input pInputText type="text" class="form-control" formControlName="userName" />
+                <label for="userName" class="form-label">Никнейм</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <input pInputText type="email" class="form-control" formControlName="email" />
+                <label for="email" class="form-label">Электронный ящик</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <input pInputText type="password" class="form-control" formControlName="password" />
+                <label for="password" class="form-label">Пароль</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <p-multiSelect
+                    inputId="roles"
+                    [options]="roleNames" 
+                    formControlName="roles" />
+                <label for="roles" class="form-label">Роли</label>
+            </p-floatLabel>
+        </div>
+    </div>
+    <button pButton type="submit" class="p-button" [disabled]="editMode ? !editForm.dirty : !editForm.valid">{{editMode ? 'Сохранить' : 'Создать'}}</button>
+    @if (editMode) {
+        <button pButton severity="danger" class="p-button" (click)="delete()">Удалить</button>
+    }
+</form>

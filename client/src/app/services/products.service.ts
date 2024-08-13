@@ -8,7 +8,7 @@ import { CreateEditProduct } from '../models/createEditProduct';
   providedIn: 'root'
 })
 export class ProductsService {
-  productsApi = inject(ProductsApiService);
+  private productsApi = inject(ProductsApiService);
 
   get(): Observable<Product[]> {
     return this.productsApi.get();

@@ -15,6 +15,7 @@ namespace ProductCatalog.Infrastructure.Data.Repositories
         public async Task<ICollection<UserEntity>> GetAsync()
         {
             return await m_DbContext.Users.AsNoTracking()
+                .Include(u => u.Roles)
                 .ToListAsync();
         }
 
@@ -26,7 +27,7 @@ namespace ProductCatalog.Infrastructure.Data.Repositories
                 users = users.AsNoTracking();
             }
 
-            return await users.SingleOrDefaultAsync(u => u.Id == userId);
+            return await users.Include(u => u.Roles).SingleOrDefaultAsync(u => u.Id == userId);
         }
     }
 }

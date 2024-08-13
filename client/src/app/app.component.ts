@@ -24,6 +24,10 @@ export class AppComponent {
       routerLink: this.getRouterLink(GlobalRoutePath.productCategories),
     },
     {
+      label: "Пользователи",
+      routerLink: this.getRouterLink(GlobalRoutePath.users),
+    },
+    {
       label: "Вход",
       routerLink: this.getRouterLink(GlobalRoutePath.signIn),
     },

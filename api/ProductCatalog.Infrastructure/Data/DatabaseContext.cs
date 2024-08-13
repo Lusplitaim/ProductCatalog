@@ -34,6 +34,14 @@ namespace ProductCatalog.Infrastructure.Data
                 b.Property(p => p.Name).HasMaxLength(200);
                 b.HasIndex(p => p.Name).IsUnique();
             });
+
+            builder.Entity<UserEntity>(b =>
+            {
+                b.HasMany(e => e.Roles)
+                    .WithOne()
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+            });
         }
     }
 }

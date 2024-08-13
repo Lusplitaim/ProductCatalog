@@ -6,7 +6,7 @@ namespace ProductCatalog.Core.Storages.Managers
 {
     public class UserRoleManager
     {
-        public async Task AddRolesAsync(IUnitOfWork unitOfWork, int userId, ICollection<UserRole> addedRoles)
+        public async Task AddRolesAsync(IUnitOfWork unitOfWork, int userId, ICollection<UserRoleType> addedRoles)
         {
             List<IdentityUserRole<int>> userRoleEntities = [];
             foreach (var userRole in addedRoles)
@@ -16,11 +16,11 @@ namespace ProductCatalog.Core.Storages.Managers
             await unitOfWork.UserRoleRepository.AddAsync(userRoleEntities);
         }
 
-        public async Task RemoveRolesAsync(IUnitOfWork unitOfWork, int userId, ICollection<UserRole> removedRoles)
+        public async Task RemoveRolesAsync(IUnitOfWork unitOfWork, int userId, ICollection<UserRoleType> removedRoles)
         {
             var userRoleEntities = await unitOfWork.UserRoleRepository.GetByUserIdAsync(userId);
 
-            var entitiesForDelete = userRoleEntities.Where(ur => removedRoles.Contains((UserRole)ur.RoleId));
+            var entitiesForDelete = userRoleEntities.Where(ur => removedRoles.Contains((UserRoleType)ur.RoleId));
 
             unitOfWork.UserRoleRepository.Delete(entitiesForDelete);
         }

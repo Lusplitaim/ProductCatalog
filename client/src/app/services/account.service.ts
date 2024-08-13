@@ -11,9 +11,9 @@ import { RegisterUser } from '../models/registerUser';
   providedIn: 'root'
 })
 export class AccountService {
-  baseUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl;
 
-  http = inject(HttpClient);
+  private http = inject(HttpClient);
 
   login(model: LoginUser) {
     return this.http.post<LoggedUserData>(this.baseUrl + 'auth/sign-in', model).pipe(

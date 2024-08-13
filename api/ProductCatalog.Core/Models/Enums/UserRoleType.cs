@@ -1,6 +1,6 @@
 ﻿namespace ProductCatalog.Core.Models.Enums
 {
-    public enum UserRole
+    public enum UserRoleType
     {
         Admin = 1,
         User = 2,

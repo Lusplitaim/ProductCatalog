@@ -7,6 +7,6 @@ namespace ProductCatalog.Core.DTOs.User
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public List<UserRole> UserRoles { get; set; } = [];
+        public List<UserRoleType> UserRoles { get; set; } = [];
     }
 }

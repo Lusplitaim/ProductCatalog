@@ -143,7 +143,7 @@ namespace ProductCatalog.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("ProductCatalog.Core.Data.Entities.ProductEntity", b =>
@@ -182,7 +182,7 @@ namespace ProductCatalog.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("ProductCatalog.Core.Data.Entities.UserEntity", b =>

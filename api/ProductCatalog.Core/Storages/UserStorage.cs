@@ -41,11 +41,12 @@ namespace ProductCatalog.Core.Storages
             await m_UnitOfWork.SaveAsync();
 
             var userRoleManager = new UserRoleManager();
-            var userRoles = model.UserRoles.Count() > 0 ? model.UserRoles : [UserRole.User];
+            var userRoles = model.UserRoles.Count() > 0 ? model.UserRoles : [UserRoleType.User];
             await userRoleManager.AddRolesAsync(m_UnitOfWork, user.Id, userRoles);
             await m_UnitOfWork.SaveAsync();
 
-            result.Result = UserDto.From(user);
+            var savedUser = await GetAsync(user.Id);
+            result.Result = savedUser;
 
             return result;
         }

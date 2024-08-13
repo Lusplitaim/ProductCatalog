@@ -6,7 +6,7 @@ namespace ProductCatalog.Core.DTOs.User
     {
         public string UserName { get; set; }
         public string? UpdatedPassword { get; set; }
-        public ICollection<UserRole> AddedRoles { get; set; } = [];
-        public ICollection<UserRole> RemovedRoles { get; set; } = [];
+        public ICollection<UserRoleType> AddedRoles { get; set; } = [];
+        public ICollection<UserRoleType> RemovedRoles { get; set; } = [];
     }
 }

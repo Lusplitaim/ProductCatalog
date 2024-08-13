@@ -79,6 +79,20 @@ namespace ProductCatalog.Core.Services
             }
         }
 
+        public async Task<UserDto> GetAsync(int id)
+        {
+            try
+            {
+                var result = await m_UserStorage.GetAsync(id, track: false);
+                return result;
+            }
+            catch (Exception ex) when (ex is not RestCoreException)
+            {
+                m_Logger.LogError(ex, ex.Message);
+                throw new Exception("Failed to get users", ex);
+            }
+        }
+
         public async Task<ExecResult> DeleteAsync(int userId)
         {
             try

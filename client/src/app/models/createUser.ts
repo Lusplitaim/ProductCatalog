@@ -1,8 +1,8 @@
 import { UserRole } from "./userRole";
 
-export interface User {
-    id: number;
+export interface CreateUser {
     userName: string;
     email: string;
-    roles: UserRole[];
+    password: string;
+    userRoles: UserRole[];
 }

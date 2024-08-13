@@ -20,6 +20,13 @@ namespace ProductCatalog.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUsers(int id)
+        {
+            var result = await m_UserService.GetAsync(id);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDto model)
         {

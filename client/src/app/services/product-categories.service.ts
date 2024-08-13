@@ -8,7 +8,7 @@ import { CreateEditProductCategory } from '../models/createEditProductCategory';
   providedIn: 'root'
 })
 export class ProductCategoriesService {
-  productCategoriesApi = inject(ProductCategoriesApiService);
+  private productCategoriesApi = inject(ProductCategoriesApiService);
 
   get(): Observable<ProductCategory[]> {
     return this.productCategoriesApi.get();
