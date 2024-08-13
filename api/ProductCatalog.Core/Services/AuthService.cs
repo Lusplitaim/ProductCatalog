@@ -21,18 +21,21 @@ namespace ProductCatalog.Core.Services
         private readonly SignInManager<UserEntity> m_SignInManager;
         private readonly JwtOptions m_JwtOptions;
         private readonly ILoggerManager m_Logger;
+        private readonly IRolePermissionStorage m_RolePermissionStorage;
         public AuthService(
             IUserStorage userStorage,
             UserManager<UserEntity> userManager,
             SignInManager<UserEntity> signInManager,
             IOptions<JwtOptions> opts,
-            ILoggerManager logger)
+            ILoggerManager logger,
+            IRolePermissionStorage permStorage)
         {
             m_UserStorage = userStorage;
             m_UserManager = userManager;
             m_SignInManager = signInManager;
             m_JwtOptions = opts.Value;
             m_Logger = logger;
+            m_RolePermissionStorage = permStorage;
         }
 
         public async Task<ExecResult<AuthResult>> AuthenticateAsync(SignInUserDto model)
@@ -57,8 +60,9 @@ namespace ProductCatalog.Core.Services
 
                 var token = await CreateTokenAsync(model.Email);
                 var user = await m_UserStorage.GetAsync(model.Email);
+                var rolePermissions = await m_RolePermissionStorage.GetByUserIdAsync(user.Id);
 
-                result.Result = new() { User = user, Token = token };
+                result.Result = new() { User = user, Token = token, Permissions = rolePermissions };
 
                 return result;
             }
@@ -84,8 +88,9 @@ namespace ProductCatalog.Core.Services
 
                 var token = await CreateTokenAsync(model.Email);
                 var user = await m_UserStorage.GetAsync(model.Email);
+                var rolePermissions = await m_RolePermissionStorage.GetByUserIdAsync(user.Id);
 
-                result.Result = new() { User = user, Token = token };
+                result.Result = new() { User = user, Token = token, Permissions = rolePermissions };
 
                 return result;
             }

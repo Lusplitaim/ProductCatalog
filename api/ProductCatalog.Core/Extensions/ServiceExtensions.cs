@@ -28,6 +28,7 @@ namespace ProductCatalog.Core.Extensions
             services.AddScoped<IUserStorage, UserStorage>();
             services.AddScoped<IProductCategoryStorage, ProductCategoryStorage>();
             services.AddScoped<IProductStorage, ProductStorage>();
+            services.AddScoped<IRolePermissionStorage, RolePermissionStorage>();
 
             services.AddScoped<IAuthUtils, AuthUtils>();
             services.AddSingleton<ILoggerManager, LoggerManager>();

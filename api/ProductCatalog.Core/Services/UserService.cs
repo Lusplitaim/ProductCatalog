@@ -1,4 +1,5 @@
 ﻿using ProductCatalog.Core.Data;
+using ProductCatalog.Core.DTOs.RolePermission;
 using ProductCatalog.Core.DTOs.User;
 using ProductCatalog.Core.Exceptions;
 using ProductCatalog.Core.Managers;
@@ -12,11 +13,13 @@ namespace ProductCatalog.Core.Services
         private readonly IUserStorage m_UserStorage;
         private readonly IUnitOfWork m_UnitOfWork;
         private readonly ILoggerManager m_Logger;
-        public UserService(IUserStorage userStorage, IUnitOfWork uow, ILoggerManager logger)
+        private readonly IRolePermissionStorage m_RolePermissionStorage;
+        public UserService(IUserStorage userStorage, IUnitOfWork uow, ILoggerManager logger, IRolePermissionStorage permStorage)
         {
             m_UserStorage = userStorage;
             m_UnitOfWork = uow;
             m_Logger = logger;
+            m_RolePermissionStorage = permStorage;
         }
 
         public async Task<ExecResult<UserDto>> CreateAsync(CreateUserDto model)
@@ -90,6 +93,20 @@ namespace ProductCatalog.Core.Services
             {
                 m_Logger.LogError(ex, ex.Message);
                 throw new Exception("Failed to get users", ex);
+            }
+        }
+
+        public async Task<IEnumerable<RolePermissionDto>> GetPermissionsAsync(int id)
+        {
+            try
+            {
+                var result = await m_RolePermissionStorage.GetByUserIdAsync(id);
+                return result;
+            }
+            catch (Exception ex) when (ex is not RestCoreException)
+            {
+                m_Logger.LogError(ex, ex.Message);
+                throw new Exception("Failed to get user permissions", ex);
             }
         }
 

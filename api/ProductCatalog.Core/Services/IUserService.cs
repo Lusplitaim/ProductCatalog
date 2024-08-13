@@ -1,4 +1,5 @@
-﻿using ProductCatalog.Core.DTOs.User;
+﻿using ProductCatalog.Core.DTOs.RolePermission;
+using ProductCatalog.Core.DTOs.User;
 using ProductCatalog.Core.Models;
 
 namespace ProductCatalog.Core.Services
@@ -7,6 +8,7 @@ namespace ProductCatalog.Core.Services
     {
         Task<IEnumerable<UserDto>> GetAsync();
         Task<UserDto> GetAsync(int id);
+        Task<IEnumerable<RolePermissionDto>> GetPermissionsAsync(int id);
         Task<ExecResult<UserDto>> CreateAsync(CreateUserDto model);
         Task<ExecResult<UserDto>> UpdateAsync(int userId, UpdateUserDto model);
         Task<ExecResult> DeleteAsync(int userId);

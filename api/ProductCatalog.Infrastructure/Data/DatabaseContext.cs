@@ -8,6 +8,7 @@ namespace ProductCatalog.Infrastructure.Data
     {
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<ProductCategoryEntity> ProductCategories { get; set; }
+        public DbSet<RolePermissionEntity> RolePermissions { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
@@ -41,6 +42,35 @@ namespace ProductCatalog.Infrastructure.Data
                     .WithOne()
                     .HasForeignKey(ur => ur.UserId)
                     .IsRequired();
+            });
+
+            builder.Entity<RolePermissionEntity>(b =>
+            {
+                b.ToTable("RolePermission");
+                b.HasKey(p => new { p.RoleId, p.Area, p.Action });
+                b.HasOne(e => e.Role)
+                    .WithMany()
+                    .HasForeignKey(e => e.RoleId);
+                b.HasOne(e => e.AreaEntity)
+                    .WithMany()
+                    .HasForeignKey(e => e.Area);
+                b.HasOne(e => e.AreaActionEntity)
+                    .WithMany()
+                    .HasForeignKey(e => e.Action);
+            });
+
+            builder.Entity<AreaActionEntity>(b =>
+            {
+                b.ToTable("AreaAction");
+                b.HasKey(p => p.Id);
+                b.Property(p => p.Name).HasMaxLength(200);
+            });
+
+            builder.Entity<AreaEntity>(b =>
+            {
+                b.ToTable("Area");
+                b.HasKey(p => p.Id);
+                b.Property(p => p.Name).HasMaxLength(200);
             });
         }
     }
