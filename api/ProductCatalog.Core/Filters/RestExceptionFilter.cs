@@ -15,6 +15,9 @@ namespace ProductCatalog.Core.Filters
                 case NotFoundCoreException:
                     result = new NotFoundResult();
                     break;
+                case ForbiddenCoreException:
+                    result = new ForbidResult();
+                    break;
             }
 
             if (result is not null)

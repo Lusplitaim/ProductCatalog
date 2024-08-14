@@ -3,6 +3,9 @@ using ProductCatalog.Core.DTOs.ProductCategory;
 using ProductCatalog.Core.Exceptions;
 using ProductCatalog.Core.Managers;
 using ProductCatalog.Core.Models;
+using ProductCatalog.Core.Models.Enums;
+using ProductCatalog.Core.Services.Authorization;
+using ProductCatalog.Core.Services.Authorization.Requirements;
 using ProductCatalog.Core.Storages;
 
 namespace ProductCatalog.Core.Services
@@ -12,17 +15,21 @@ namespace ProductCatalog.Core.Services
         private readonly IProductCategoryStorage m_ProductCategoryStorage;
         private readonly IUnitOfWork m_UnitOfWork;
         private readonly ILoggerManager m_Logger;
-        public ProductCategoryService(IProductCategoryStorage pcs, IUnitOfWork uow, ILoggerManager logger)
+        private readonly IAuthService m_AuthService;
+        public ProductCategoryService(IProductCategoryStorage pcs, IUnitOfWork uow, ILoggerManager logger, IAuthService authService)
         {
             m_ProductCategoryStorage = pcs;
             m_UnitOfWork = uow;
             m_Logger = logger;
+            m_AuthService = authService;
         }
 
         public async Task<ExecResult<ProductCategoryDto>> CreateAsync(CreateProductCategoryDto model)
         {
             try
             {
+                await m_AuthService.AuthorizeAsync(AreaActionRequirements.CreateRequirement, Area.ProductCategories);
+
                 using var transaction = m_UnitOfWork.BeginTransaction();
 
                 var result = await m_ProductCategoryStorage.CreateAsync(model);
@@ -42,6 +49,8 @@ namespace ProductCatalog.Core.Services
         {
             try
             {
+                await m_AuthService.AuthorizeAsync(AreaActionRequirements.UpdateRequirement, Area.ProductCategories);
+
                 using var transaction = m_UnitOfWork.BeginTransaction();
 
                 var result = await m_ProductCategoryStorage.UpdateAsync(categoryId, model);
@@ -61,6 +70,8 @@ namespace ProductCatalog.Core.Services
         {
             try
             {
+                await m_AuthService.AuthorizeAsync(AreaActionRequirements.DeleteRequirement, Area.ProductCategories);
+
                 using var transaction = m_UnitOfWork.BeginTransaction();
 
                 var result = await m_ProductCategoryStorage.DeleteAsync(categoryId);
@@ -80,6 +91,7 @@ namespace ProductCatalog.Core.Services
         {
             try
             {
+                await m_AuthService.AuthorizeAsync(AreaActionRequirements.ReadRequirement, Area.ProductCategories);
                 var result = await m_ProductCategoryStorage.GetAsync();
                 return result;
             }

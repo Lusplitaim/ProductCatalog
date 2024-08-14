@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +8,7 @@ using NLog.Extensions.Logging;
 using ProductCatalog.Core.Managers;
 using ProductCatalog.Core.Models.Options;
 using ProductCatalog.Core.Services;
+using ProductCatalog.Core.Services.Authorization;
 using ProductCatalog.Core.Storages;
 using ProductCatalog.Core.Utils;
 using System.Text;
@@ -21,6 +23,7 @@ namespace ProductCatalog.Core.Extensions
             ConfigureLogging(config);
 
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductCategoryService, ProductCategoryService>();
             services.AddScoped<IProductService, ProductService>();
@@ -33,8 +36,16 @@ namespace ProductCatalog.Core.Extensions
             services.AddScoped<IAuthUtils, AuthUtils>();
             services.AddSingleton<ILoggerManager, LoggerManager>();
 
+            services.AddAuthHandlers();
+
             services.Configure<JwtOptions>(config.GetSection(JwtOptions.JwtSettings));
 
+            return services;
+        }
+
+        private static IServiceCollection AddAuthHandlers(this IServiceCollection services)
+        {
+            services.AddTransient<IAuthorizationHandler, AreaActionAuthHandler>();
             return services;
         }
 

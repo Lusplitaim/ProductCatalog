@@ -9,8 +9,8 @@ namespace ProductCatalog.API.Controllers
     [AllowAnonymous]
     public class AuthController : BaseController
     {
-        private readonly IAuthService m_AuthService; 
-        public AuthController(IAuthService authService)
+        private readonly IAccountService m_AuthService; 
+        public AuthController(IAccountService authService)
         {
             m_AuthService = authService;
         }

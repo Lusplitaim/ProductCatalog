@@ -14,7 +14,7 @@ using System.Text;
 
 namespace ProductCatalog.Core.Services
 {
-    internal class AuthService : IAuthService
+    internal class AccountService : IAccountService
     {
         private readonly IUserStorage m_UserStorage;
         private readonly UserManager<UserEntity> m_UserManager;
@@ -22,7 +22,7 @@ namespace ProductCatalog.Core.Services
         private readonly JwtOptions m_JwtOptions;
         private readonly ILoggerManager m_Logger;
         private readonly IRolePermissionStorage m_RolePermissionStorage;
-        public AuthService(
+        public AccountService(
             IUserStorage userStorage,
             UserManager<UserEntity> userManager,
             SignInManager<UserEntity> signInManager,
