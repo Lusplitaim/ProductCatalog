@@ -3,7 +3,7 @@ using ProductCatalog.Core.Services;
 
 namespace ProductCatalog.API.Controllers
 {
-    [Route("api/users/{userId}/[controller]")]
+    [Route("api/account/[controller]")]
     public class PermissionsController : BaseController
     {
         private readonly IUserService m_UserService;
@@ -13,9 +13,9 @@ namespace ProductCatalog.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPermissions(int userId)
+        public async Task<IActionResult> GetPermissions()
         {
-            var result = await m_UserService.GetPermissionsAsync(userId);
+            var result = await m_UserService.GetPermissionsAsync();
             return Ok(result);
         }
     }

@@ -14,6 +14,9 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { PermissionsService } from '../../services/permissions.service';
+import { AppArea } from '../../models/appArea';
+import { AreaAction } from '../../models/areaAction';
 
 @Component({
   selector: 'app-user-editor',
@@ -35,6 +38,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 export class UserEditorComponent {
   private formBuilder = inject(FormBuilder);
   private usersService = inject(UsersService);
+  private permissionsService = inject(PermissionsService);
   private dialogRef = inject(DynamicDialogRef);
   private dialogConfig = inject(DynamicDialogConfig) as DynamicDialogConfig<User>;
 
@@ -48,8 +52,10 @@ export class UserEditorComponent {
   });
   roles: { id: number, name: string }[] = [];
   roleNames: string[] = [];
+  canDelete = false;
 
   ngOnInit(): void {
+    const areaActions = this.permissionsService.getAllowedActionsByArea(AppArea.Users);
     this.roles = Object.keys(UserRole).filter(k => Number(k)).map(k => {
       const key = Number(k);
       return {id: key, name: UserRole[key]} as { id: number, name: string };
@@ -59,6 +65,7 @@ export class UserEditorComponent {
 
     if (user) {
       this.editMode = true;
+      this.canDelete = this.editForm && areaActions.some(a => a === AreaAction.Delete);
       this.user = this.dialogConfig.data;
 
       this.editForm.setValue({

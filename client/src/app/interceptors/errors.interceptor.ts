@@ -6,7 +6,7 @@ import { AccountService } from '../services/account.service';
 
 export const errorsInterceptor: HttpInterceptorFn = (req, next) => {
   //const toastService = inject(ToastService);
-  //const accountService = inject(AccountService);
+  const accountService = inject(AccountService);
   const router = inject(Router);
 
   return next(req).pipe(
@@ -19,7 +19,7 @@ export const errorsInterceptor: HttpInterceptorFn = (req, next) => {
             break;
           case 401:
             //toastService.showDanger("Error", "Unauthorized");
-            //accountService.logout();
+            accountService.logout();
             router.navigate(["sign-in"]);
             break;
           case 403:

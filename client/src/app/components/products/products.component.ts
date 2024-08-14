@@ -9,6 +9,9 @@ import { ProductCategoriesService } from '../../services/product-categories.serv
 import { ProductCategory } from '../../models/productCategory';
 import { ProductEditorData } from '../../models/productEditorData';
 import { DialogEditResult } from '../../models/dialogEditResult';
+import { PermissionsService } from '../../services/permissions.service';
+import { AppArea } from '../../models/appArea';
+import { AreaAction } from '../../models/areaAction';
 
 @Component({
   selector: 'app-products',
@@ -21,14 +24,21 @@ import { DialogEditResult } from '../../models/dialogEditResult';
 export class ProductsComponent implements OnInit {
   private productsService = inject(ProductsService);
   private categoriesService = inject(ProductCategoriesService);
+  private permissionsService = inject(PermissionsService);
   private dialogRef: DynamicDialogRef | undefined;
   private dialogService = inject(DialogService);
   
   categories: ProductCategory[] = [];
   products: Product[] = [];
   selectedProduct: Product | undefined;
+  canCreate = false;
+  canEdit = false;
 
   ngOnInit(): void {
+    const areaActions = this.permissionsService.getAllowedActionsByArea(AppArea.Products);
+    this.canCreate = areaActions.some(a => a === AreaAction.Create);
+    this.canEdit = areaActions.some(a => a === AreaAction.Update);
+    
     this.productsService.get()
       .subscribe(products => {
         this.products = products;
@@ -61,6 +71,10 @@ export class ProductsComponent implements OnInit {
   }
 
   onRowSelect(_: TableRowSelectEvent) {
+    if (!this.canEdit) {
+      return;
+    }
+
     const dialogConfig = this.getDialogConfig<ProductEditorData>();
     dialogConfig.header = `Продукт '${this.selectedProduct?.name}'`;
     dialogConfig.data = {

@@ -34,7 +34,7 @@ export class SignInComponent {
 
     this.accountService.login(logUserData)
       .subscribe(_ => {
-        this.router.navigate([GlobalRoutePath.products]);
+        this.router.navigate([GlobalRoutePath.Products]);
       });
   }
 }

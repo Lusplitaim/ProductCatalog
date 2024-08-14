@@ -10,7 +10,9 @@
             <div>
                 Пользователи
             </div>
-            <button pButton (click)="openCreationModal()"><i class="pi pi-user-plus"></i></button>
+            @if (canCreate) {
+                <button pButton (click)="openCreationModal()"><i class="pi pi-user-plus"></i></button>
+            }
         </div>
     </ng-template>
     <ng-template pTemplate="header">

@@ -6,6 +6,9 @@ import { DialogEditResult } from '../../models/dialogEditResult';
 import { TableModule, TableRowSelectEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { UsersService } from '../../services/users.service';
+import { PermissionsService } from '../../services/permissions.service';
+import { AreaAction } from '../../models/areaAction';
+import { AppArea } from '../../models/appArea';
 
 @Component({
   selector: 'app-users',
@@ -17,13 +20,20 @@ import { UsersService } from '../../services/users.service';
 })
 export class UsersComponent {
   private usersService = inject(UsersService);
+  private permissionsService = inject(PermissionsService);
   private dialogRef: DynamicDialogRef | undefined;
   private dialogService = inject(DialogService);
   
   users: User[] = [];
   selectedUser: User | undefined;
+  canCreate = false;
+  canEdit = false;
 
   ngOnInit(): void {
+    const areaActions = this.permissionsService.getAllowedActionsByArea(AppArea.Users);
+    this.canCreate = areaActions.some(a => a === AreaAction.Create);
+    this.canEdit = areaActions.some(a => a === AreaAction.Update);
+
     this.usersService.get()
       .subscribe(users => {
         this.users = users;
@@ -44,6 +54,10 @@ export class UsersComponent {
   }
 
   onRowSelect(_: TableRowSelectEvent) {
+    if (!this.canEdit) {
+      return;
+    }
+
     const dialogConfig = this.getDialogConfig<User>();
     dialogConfig.header = `Пользователь '${this.selectedUser?.userName}'`;
     dialogConfig.data = this.selectedUser;

@@ -5,45 +5,49 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { authGuard } from './guards/auth.guard';
 import { ProductCategoriesComponent } from './components/product-categories/product-categories.component';
 import { UsersComponent } from './components/users/users.component';
+import { AppArea } from './models/appArea';
 
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: GlobalRoutePath.products,
+        redirectTo: GlobalRoutePath.Products,
         pathMatch: 'full',
     },
     {
         path: '',
-        canActivate: [authGuard],
+        canActivateChild: [authGuard],
         children: [
             {
-                path: GlobalRoutePath.products,
+                path: GlobalRoutePath.Products,
+                data: { area: AppArea.Products },
                 component: ProductsComponent,
             },
             {
-                path: GlobalRoutePath.productCategories,
+                path: GlobalRoutePath.ProductCategories,
+                data: { area: AppArea.ProductCategories },
                 component: ProductCategoriesComponent,
             },
             {
-                path: GlobalRoutePath.users,
+                path: GlobalRoutePath.Users,
+                data: { area: AppArea.Users },
                 component: UsersComponent,
             },
         ],
     },
     {
-        path: GlobalRoutePath.signIn,
+        path: GlobalRoutePath.SignIn,
         component: SignInComponent,
     },
     {
-        path: GlobalRoutePath.signUp,
+        path: GlobalRoutePath.SignUp,
         component: SignUpComponent,
     },
 ];
 
 export const enum GlobalRoutePath {
-    products = 'products',
-    productCategories = 'product-categories',
-    users = 'users',
-    signIn = 'sign-in',
-    signUp = 'sign-up',
+    Products = 'products',
+    ProductCategories = 'product-categories',
+    Users = 'users',
+    SignIn = 'sign-in',
+    SignUp = 'sign-up',
 };

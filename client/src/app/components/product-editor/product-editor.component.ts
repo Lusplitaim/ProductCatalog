@@ -13,6 +13,9 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Product } from '../../models/product';
 import { ProductEditorData } from '../../models/productEditorData';
 import { DialogEditAction, DialogEditResult } from '../../models/dialogEditResult';
+import { PermissionsService } from '../../services/permissions.service';
+import { AppArea } from '../../models/appArea';
+import { AreaAction } from '../../models/areaAction';
 
 @Component({
   selector: 'app-product-editor',
@@ -33,10 +36,12 @@ import { DialogEditAction, DialogEditResult } from '../../models/dialogEditResul
 export class ProductEditorComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private productsService = inject(ProductsService);
+  private permissionsService = inject(PermissionsService);
   private dialogRef = inject(DynamicDialogRef);
   private dialogConfig = inject(DynamicDialogConfig) as DynamicDialogConfig<ProductEditorData>;
 
   editMode = false;
+  canDelete = false;
   product: Product | undefined = undefined;
   categories: ProductCategory[] = [];
   editForm = this.formBuilder.group({
@@ -58,6 +63,8 @@ export class ProductEditorComponent implements OnInit {
 
     if (product) {
       this.editMode = true;
+      const areaActions = this.permissionsService.getAllowedActionsByArea(AppArea.Users);
+      this.canDelete = this.editMode && areaActions.some(a => a === AreaAction.Delete);
       this.product = this.dialogConfig.data.product;
 
       const product = this.product;

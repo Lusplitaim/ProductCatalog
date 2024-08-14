@@ -10,7 +10,9 @@
             <div>
                 Продукты
             </div>
-            <button pButton (click)="openCreationModal()"><i class="pi pi-plus"></i></button>
+            @if (canCreate) {
+                <button pButton (click)="openCreationModal()"><i class="pi pi-plus"></i></button>
+            }
         </div>
     </ng-template>
     <ng-template pTemplate="header">

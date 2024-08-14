@@ -1,5 +1,5 @@
 export enum AppArea {
-    users = 1,
-    products = 2,
-    productCategories = 3,
+    Users = 1,
+    Products = 2,
+    ProductCategories = 3,
 }

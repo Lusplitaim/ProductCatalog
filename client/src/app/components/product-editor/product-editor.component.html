@@ -43,7 +43,7 @@
         </div>
     </div>
     <button pButton type="submit" class="p-button" [disabled]="editMode ? !editForm.dirty : !editForm.valid">{{editMode ? 'Сохранить' : 'Создать'}}</button>
-    @if (editMode) {
+    @if (canDelete) {
         <button pButton severity="danger" class="p-button" (click)="delete()">Удалить</button>
     }
 </form>

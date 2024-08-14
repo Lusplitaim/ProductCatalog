@@ -36,7 +36,7 @@ export class SignUpComponent {
 
     this.accountService.register(regUserData)
       .subscribe(_ => {
-        this.router.navigate([GlobalRoutePath.products]);
+        this.router.navigate([GlobalRoutePath.Products]);
       });
   }
 }

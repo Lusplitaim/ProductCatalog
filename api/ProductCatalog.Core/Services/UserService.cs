@@ -5,6 +5,7 @@ using ProductCatalog.Core.Exceptions;
 using ProductCatalog.Core.Managers;
 using ProductCatalog.Core.Models;
 using ProductCatalog.Core.Storages;
+using ProductCatalog.Core.Utils;
 
 namespace ProductCatalog.Core.Services
 {
@@ -14,12 +15,14 @@ namespace ProductCatalog.Core.Services
         private readonly IUnitOfWork m_UnitOfWork;
         private readonly ILoggerManager m_Logger;
         private readonly IRolePermissionStorage m_RolePermissionStorage;
-        public UserService(IUserStorage userStorage, IUnitOfWork uow, ILoggerManager logger, IRolePermissionStorage permStorage)
+        private readonly IAuthUtils m_AuthUtils;
+        public UserService(IUserStorage userStorage, IUnitOfWork uow, ILoggerManager logger, IRolePermissionStorage permStorage, IAuthUtils authUtils)
         {
             m_UserStorage = userStorage;
             m_UnitOfWork = uow;
             m_Logger = logger;
             m_RolePermissionStorage = permStorage;
+            m_AuthUtils = authUtils;
         }
 
         public async Task<ExecResult<UserDto>> CreateAsync(CreateUserDto model)
@@ -96,11 +99,12 @@ namespace ProductCatalog.Core.Services
             }
         }
 
-        public async Task<IEnumerable<RolePermissionDto>> GetPermissionsAsync(int id)
+        public async Task<IEnumerable<RolePermissionDto>> GetPermissionsAsync()
         {
             try
             {
-                var result = await m_RolePermissionStorage.GetByUserIdAsync(id);
+                var userId = m_AuthUtils.GetAuthUserId();
+                var result = await m_RolePermissionStorage.GetByUserIdAsync(userId);
                 return result;
             }
             catch (Exception ex) when (ex is not RestCoreException)
