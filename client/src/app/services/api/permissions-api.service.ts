@@ -3,11 +3,12 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Permission } from '../../models/permission';
+import { BaseApi } from './base-api';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PermissionsApiService {
+export class PermissionsApiService extends BaseApi {
   private http = inject(HttpClient);
   private baseApi = environment.apiUrl;
 

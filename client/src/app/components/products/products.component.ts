@@ -5,61 +5,64 @@ import { ProductsService } from '../../services/products.service';
 import { ButtonModule } from 'primeng/button';
 import { DialogService, DynamicDialogConfig, DynamicDialogModule, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProductEditorComponent } from '../product-editor/product-editor.component';
-import { ProductCategoriesService } from '../../services/product-categories.service';
-import { ProductCategory } from '../../models/productCategory';
-import { ProductEditorData } from '../../models/productEditorData';
 import { DialogEditResult } from '../../models/dialogEditResult';
 import { PermissionsService } from '../../services/permissions.service';
 import { AppArea } from '../../models/appArea';
 import { AreaAction } from '../../models/areaAction';
+import { SidebarModule } from 'primeng/sidebar';
+import { ProductFiltersComponent } from '../product-filters/product-filters.component';
+import { ProductFiltersContext } from '../../models/productFiltersContext';
+import { ProductFilters } from '../../models/productFilters';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [TableModule, ButtonModule, DynamicDialogModule],
+  imports: [TableModule, ButtonModule, DynamicDialogModule, SidebarModule, ProductFiltersComponent],
   providers: [DialogService],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
 })
 export class ProductsComponent implements OnInit {
   private productsService = inject(ProductsService);
-  private categoriesService = inject(ProductCategoriesService);
   private permissionsService = inject(PermissionsService);
   private dialogRef: DynamicDialogRef | undefined;
   private dialogService = inject(DialogService);
   
-  categories: ProductCategory[] = [];
   products: Product[] = [];
   selectedProduct: Product | undefined;
   canCreate = false;
   canEdit = false;
+  filtersVisible = false;
+  filtersContext!: ProductFiltersContext;
 
   ngOnInit(): void {
     const areaActions = this.permissionsService.getAllowedActionsByArea(AppArea.Products);
     this.canCreate = areaActions.some(a => a === AreaAction.Create);
     this.canEdit = areaActions.some(a => a === AreaAction.Update);
     
-    this.productsService.get()
+    this.getProducts();
+
+    this.productsService.getFiltersContext()
+      .subscribe(filtersContext => {
+        this.filtersContext = filtersContext;
+      });
+  }
+
+  private getProducts(filters: ProductFilters | null = null) {
+    this.productsService.get(filters)
       .subscribe(products => {
         this.products = products;
       });
-
-    this.categoriesService.get()
-      .subscribe((categories: ProductCategory[]) => {
-        this.categories = categories;
-      });
   }
 
-  getCategoryName(id: number): string {
-    return this.categories.find(c => c.id === id)!.name;
+  applyFilters(filters: ProductFilters) {
+    this.filtersVisible = false;
+    this.getProducts(filters);
   }
 
   openCreationModal() {
-    const dialogConfig = this.getDialogConfig<ProductEditorData>();
+    const dialogConfig = this.getDialogConfig<number>();
     dialogConfig.header = 'Создание продукта';
-    dialogConfig.data = {
-      categories: this.categories,
-    } as ProductEditorData;
 
     this.dialogRef = this.dialogService.open(ProductEditorComponent, dialogConfig);
 
@@ -75,12 +78,9 @@ export class ProductsComponent implements OnInit {
       return;
     }
 
-    const dialogConfig = this.getDialogConfig<ProductEditorData>();
+    const dialogConfig = this.getDialogConfig<number>();
     dialogConfig.header = `Продукт '${this.selectedProduct?.name}'`;
-    dialogConfig.data = {
-      product: this.selectedProduct,
-      categories: this.categories,
-    } as ProductEditorData;
+    dialogConfig.data = this.selectedProduct?.id;
 
     this.dialogRef = this.dialogService.open(ProductEditorComponent, dialogConfig);
 

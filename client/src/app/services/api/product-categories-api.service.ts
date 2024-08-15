@@ -4,11 +4,12 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ProductCategory } from '../../models/productCategory';
 import { CreateEditProductCategory } from '../../models/createEditProductCategory';
+import { BaseApi } from './base-api';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductCategoriesApiService {
+export class ProductCategoriesApiService extends BaseApi {
   private http = inject(HttpClient);
   private baseApi = environment.apiUrl;
 

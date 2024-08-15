@@ -1,3 +1,7 @@
+<p-sidebar [(visible)]="filtersVisible">
+    <app-product-filters [categories]="filtersContext.categories" (onFiltersChange)="applyFilters($event)"></app-product-filters>
+</p-sidebar>
+
 <p-table
     [value]="products"
     [tableStyle]="{ 'min-width': '50rem' }"
@@ -10,9 +14,12 @@
             <div>
                 Продукты
             </div>
-            @if (canCreate) {
-                <button pButton (click)="openCreationModal()"><i class="pi pi-plus"></i></button>
-            }
+            <div class="flex gap-4">
+                <button pButton icon="pi pi-filter" [rounded]="true" [text]="true" severity="info" (click)="filtersVisible = true"></button>
+                @if (canCreate) {
+                    <button pButton (click)="openCreationModal()"><i class="pi pi-plus"></i></button>
+                }
+            </div>
         </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -27,7 +34,7 @@
         <tr [pSelectableRow]="product">
             <td>{{ product.id }}</td>
             <td>{{ product.name }}</td>
-            <td>{{ getCategoryName(product.categoryId) }}</td>
+            <td>{{ product.category.name }}</td>
             <td>{{ product.price }}</td>
         </tr>
     </ng-template>

@@ -14,9 +14,9 @@ namespace ProductCatalog.Core.Storages
             m_UnitOfWork = uow;
         }
 
-        public async Task<ICollection<ProductDto>> GetAsync()
+        public async Task<ICollection<ProductDto>> GetAsync(ProductFilters filters)
         {
-            var entities = await m_UnitOfWork.ProductRepository.GetAsync();
+            var entities = await m_UnitOfWork.ProductRepository.GetAsync(filters);
 
             return entities.Select(ProductDto.From).ToList();
         }
@@ -50,7 +50,8 @@ namespace ProductCatalog.Core.Storages
 
             await m_UnitOfWork.SaveAsync();
 
-            result.Result = ProductDto.From(entity);
+            var updated = await GetAsync(entity.Id);
+            result.Result = updated;
 
             return result;
         }
@@ -74,7 +75,8 @@ namespace ProductCatalog.Core.Storages
 
             await m_UnitOfWork.SaveAsync();
 
-            result.Result = ProductDto.From(entity);
+            var updated = await GetAsync(entity.Id);
+            result.Result = updated;
 
             return result;
         }

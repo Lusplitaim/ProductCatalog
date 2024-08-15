@@ -1,4 +1,5 @@
 ﻿using ProductCatalog.Core.Data.Entities;
+using ProductCatalog.Core.DTOs.ProductCategory;
 
 namespace ProductCatalog.Core.DTOs.Product
 {
@@ -10,7 +11,7 @@ namespace ProductCatalog.Core.DTOs.Product
         public double Price { get; set; }
         public string? Note { get; set; }
         public string? SpecialNote { get; set; }
-        public int CategoryId { get; set; }
+        public ProductCategoryDto Category { get; set; }
 
         public static ProductDto From(ProductEntity entity)
         {
@@ -22,7 +23,7 @@ namespace ProductCatalog.Core.DTOs.Product
                 Price = entity.Price,
                 Note = entity.Note,
                 SpecialNote = entity.SpecialNote,
-                CategoryId = entity.CategoryId,
+                Category = ProductCategoryDto.From(entity.Category),
             };
         }
     }

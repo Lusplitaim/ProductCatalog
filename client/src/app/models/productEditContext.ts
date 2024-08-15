@@ -1,7 +1,7 @@
 import { Product } from "./product";
 import { ProductCategory } from "./productCategory";
 
-export interface ProductEditorData {
-    product: Product;
+export interface ProductEditContext {
+    product?: Product;
     categories: ProductCategory[];
 }

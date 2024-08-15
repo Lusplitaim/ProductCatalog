@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NLog.Filters;
 using ProductCatalog.Core.DTOs.Product;
 using ProductCatalog.Core.Extensions;
+using ProductCatalog.Core.Models;
 using ProductCatalog.Core.Services;
 
 namespace ProductCatalog.API.Controllers
@@ -14,9 +16,9 @@ namespace ProductCatalog.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProducts([FromQuery] ProductFilters filters)
         {
-            var result = await m_ProductService.GetAsync();
+            var result = await m_ProductService.GetAsync(filters);
             return Ok(result);
         }
 

@@ -11,7 +11,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProductsService } from '../../services/products.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Product } from '../../models/product';
-import { ProductEditorData } from '../../models/productEditorData';
 import { DialogEditAction, DialogEditResult } from '../../models/dialogEditResult';
 import { PermissionsService } from '../../services/permissions.service';
 import { AppArea } from '../../models/appArea';
@@ -38,12 +37,12 @@ export class ProductEditorComponent implements OnInit {
   private productsService = inject(ProductsService);
   private permissionsService = inject(PermissionsService);
   private dialogRef = inject(DynamicDialogRef);
-  private dialogConfig = inject(DynamicDialogConfig) as DynamicDialogConfig<ProductEditorData>;
+  private dialogConfig = inject(DynamicDialogConfig) as DynamicDialogConfig<number>;
 
   editMode = false;
   canDelete = false;
-  product: Product | undefined = undefined;
   categories: ProductCategory[] = [];
+  product: Product | undefined = undefined;
   editForm = this.formBuilder.group({
     name: new FormControl<string>('', [Validators.required]),
     description: new FormControl<string>('', [Validators.required]),
@@ -54,31 +53,30 @@ export class ProductEditorComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    if (!this.dialogConfig.data) {
-      return;
-    }
+    const productId = this.dialogConfig.data;
 
-    const product = this.dialogConfig.data.product;
-    this.categories = this.dialogConfig.data.categories;
+    this.productsService.getEditContext(productId)
+      .subscribe(context => {
+        this.categories = context.categories;
 
-    if (product) {
-      this.editMode = true;
-      const areaActions = this.permissionsService.getAllowedActionsByArea(AppArea.Users);
-      this.canDelete = this.editMode && areaActions.some(a => a === AreaAction.Delete);
-      this.product = this.dialogConfig.data.product;
-
-      const product = this.product;
-      const category = this.categories.find(c => c.id === product.categoryId);
-
-      this.editForm.setValue({
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        note: product.note,
-        specialNote: product.specialNote,
-        category: category,
+        if (context.product) {
+          this.editMode = true;
+          const areaActions = this.permissionsService.getAllowedActionsByArea(AppArea.Products);
+          this.canDelete = this.editMode && areaActions.some(a => a === AreaAction.Delete);
+          this.product = context.product;
+    
+          const product = this.product;
+    
+          this.editForm.setValue({
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            note: product.note,
+            specialNote: product.specialNote,
+            category: product.category,
+          });
+        }
       });
-    }
   }
   
   save() {

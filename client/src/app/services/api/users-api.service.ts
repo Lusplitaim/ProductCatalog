@@ -5,11 +5,12 @@ import { User } from '../../models/user';
 import { Observable } from 'rxjs';
 import { CreateUser } from '../../models/createUser';
 import { EditUser } from '../../models/editUser';
+import { BaseApi } from './base-api';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UsersApiService {
+export class UsersApiService extends BaseApi {
   private http = inject(HttpClient);
   private baseApi = environment.apiUrl;
 

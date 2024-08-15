@@ -1,0 +1,27 @@
+<form class="flex flex-col items-center space-y-7" [formGroup]="filterForm" (ngSubmit)="apply()">
+    <div class="self-center space-y-7">
+        <div>
+            <p-floatLabel>
+                <input pInputText type="number" class="form-control" formControlName="minPrice" />
+                <label for="minPrice" class="form-label">Минимальная цена</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <input pInputText type="number" class="form-control" formControlName="maxPrice" />
+                <label for="maxPrice" class="form-label">Максимальная цена</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-floatLabel>
+                <p-multiSelect
+                    inputId="categories"
+                    optionLabel="name"
+                    [options]="categories"
+                    formControlName="categories" />
+                <label for="roles" class="form-label">Категории</label>
+            </p-floatLabel>
+        </div>
+    </div>
+    <button pButton type="submit" class="p-button" [disabled]="!filterForm.dirty">Применить</button>
+</form>
