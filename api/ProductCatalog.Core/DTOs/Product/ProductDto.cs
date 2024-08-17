@@ -1,5 +1,7 @@
-﻿using ProductCatalog.Core.Data.Entities;
+﻿using ProductCatalog.Core.Attributes;
+using ProductCatalog.Core.Data.Entities;
 using ProductCatalog.Core.DTOs.ProductCategory;
+using ProductCatalog.Core.Models.Enums;
 
 namespace ProductCatalog.Core.DTOs.Product
 {
@@ -10,6 +12,7 @@ namespace ProductCatalog.Core.DTOs.Product
         public string Description { get; set; }
         public double Price { get; set; }
         public string? Note { get; set; }
+        [RequiredRoles(UserRoleType.AdvancedUser)]
         public string? SpecialNote { get; set; }
         public ProductCategoryDto Category { get; set; }
 
